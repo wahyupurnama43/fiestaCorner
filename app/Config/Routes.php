@@ -39,6 +39,7 @@ $routes->add('/transaksi_proses', 'User::proses_checkout', ['filter' => 'role:us
 $routes->get('/orders', 'User::orders_index', ['filter' => 'role:user']);
 $routes->get('/data_pembeli', 'User::data_pembeli', ['filter' => 'role:user']);
 $routes->get('/tentang-kami', 'User::tentang_kami', ['filter' => 'role:user']);
+$routes->add('/ubah_status_pesanan/(:segment)', 'User::ubah_status_pesanan/$1', ['filter' => 'role:user']);
 
 
 $routes->get('/admin', 'Admin::index', ['filter' => 'role:admin']);

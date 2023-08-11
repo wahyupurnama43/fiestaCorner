@@ -1,6 +1,6 @@
-<?= $this->extend('mystyle/index'); ?>
+<?= $this->extend('mystyle/index') ?>
 
-<?= $this->section('konten'); ?>
+<?= $this->section('konten') ?>
 
 <!-- Body: Body -->
 <div class="body d-flex py-3">
@@ -44,9 +44,10 @@
                                         <td>
                                             Rp <?= number_format($pesanan->total_harga, 0, ',', '.') ?>
                                         </td>
-                                        <td><?= ($pesanan->tanggal_kirim == NULL)  ? "-" : $pesanan->tanggal_kirim; ?></td>
-                                        <td><?= ($pesanan->tanggal_sampai == NULL) ? "-" : $pesanan->tanggal_sampai; ?></td>
-                                        <td><span class="badge bg-<?= ($pesanan->status_transaksi == 'MENUNGGU KONFIRMASI') ? "warning" : "success" ?>"><?= $pesanan->status_transaksi ?></span></td>
+                                        <td><?= $pesanan->tanggal_kirim == null ? '-' : $pesanan->tanggal_kirim ?></td>
+                                        <td><?= $pesanan->tanggal_sampai == null ? '-' : $pesanan->tanggal_sampai ?></td>
+                                        <td><span class="badge bg-<?= $pesanan->status_transaksi == 'MENUNGGU KONFIRMASI' ? 'warning' : 'success' ?>"><?= $pesanan->status_transaksi ?></span>
+                                        </td>
                                         <td>
                                             <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#detail<?= $pesanan->kd_pesanan ?>">
                                                 <i class="icofont-eye text-success"></i>
@@ -54,6 +55,11 @@
                                             <a target="_blank" class="btn btn-outline-info" href="<?= base_url() . 'invoice/' . $pesanan->kd_pesanan ?>">
                                                 <i class="icofont-file-pdf text-success"></i>
                                             </a>
+                                            <?php if ($pesanan->status_transaksi == 'PROSES KIRIM') : ?>
+                                                <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#expadd<?= $pesanan->kd_pesanan ?>">
+                                                    <i class="icofont-edit text-success"></i>
+                                                </button>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                     <!-- MODAL Detail PRODUK -->
@@ -130,6 +136,44 @@
                                         </div>
                                     </div>
                                     <!-- END MODAL -->
+                                    <!-- MODAL EDIT PRODUK -->
+                                    <div class="modal fade" id="expadd<?= $pesanan->kd_pesanan ?>" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <form action="<?= base_url() ?>ubah_status_pesanan/<?= $pesanan->kd_pesanan ?>" method="post" enctype="multipart/form-data">
+                                                    <?= csrf_field() ?>
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title  fw-bold" id="expaddLabel">PROSES PESANAN
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="deadline-form">
+
+                                                            <div class="row g-3 mb-3">
+                                                                <div class="col-sm-12">
+                                                                    <label for="item" class="form-label">STATUS
+                                                                        TRANSAKSI</label>
+                                                                    <select class="select form-control" name="status_transaksi" required>
+                                                                        <option> - PILIH - </option>
+                                                                        <option value="SELESAI" <?= $pesanan->status_transaksi === 'SELESAI' ? 'selected' : '' ?>>
+                                                                            SELESAI</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END MODAL -->
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -141,4 +185,4 @@
 </div>
 
 
-<?= $this->endSection(); ?>
+<?= $this->endSection() ?>

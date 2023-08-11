@@ -172,7 +172,7 @@
 
                     <?php } else { ?>
                         <a href="<?= base_url() ?>login" class="btn btn-primary"> Login </a>&nbsp;
-                        <a href="<?= base_url() ?>login" class="btn btn-primary"> register </a>
+                        <a href="<?= base_url() ?>register" class="btn btn-primary"> register </a>
                     <?php } ?>
                 </div>
 

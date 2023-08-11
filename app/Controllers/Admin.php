@@ -31,7 +31,7 @@ class Admin extends BaseController
 
         $builder = $this->db->table('tb_transaksi');
         $builder->selectSum('total_harga');
-        $builder->where("status_transaksi = 'PROSES KIRIM' OR status_transaksi = 'DONE'");
+        $builder->where("status_transaksi = 'PROSES KIRIM' OR status_transaksi = 'SELESAI'");
         $query = $builder->get();
         $data['total_penjualan'] = $query->getRow();
 
@@ -43,7 +43,7 @@ class Admin extends BaseController
 
         $builder = $this->db->table('tb_transaksi');
         $builder->selectCount('total_harga');
-        $builder->where("status_transaksi = 'DONE'");
+        $builder->where("status_transaksi = 'SELESAI'");
         $query = $builder->get();
         $data['success_payment'] = $query->getRow();
 

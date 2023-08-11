@@ -45,6 +45,12 @@
                         </div>
                         <div class="col-12">
                             <div class="mb-2">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input name="nama_lengkap" type="text" class="form-control form-control-lg <?php if (session('errors.nama_lengkap')) : ?>is-invalid<?php endif ?>" id="nama_lengkap" placeholder="Nama Lengkap" value="<?= old('nama_lengkap') ?>">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-2">
                                 <label class="form-label">Password</label>
                                 <input name="password" type="password" class="form-control form-control-lg <?php if (session('errors.password')) : ?>is-invalid<?php endif ?>" placeholder="<?= lang('Auth.password') ?>" id="password" autocomplete="off">
                             </div>

@@ -377,4 +377,62 @@ class User extends BaseController
 
         return view('tentang-kami', $data);
     }
+
+    public function ubah_status_pesanan($kd_pesanan = 0)
+    {
+        $data['title'] = 'Ubah status order';
+
+        $transaksi = new Transaksi();
+        $barang    = new Barang();
+
+
+        // VALIDASI 
+        $validation =  \Config\Services::validation();
+        $validation->setRules([
+            'status_transaksi' => 'required',
+        ]);
+        $isDataValid = $validation->withRequest($this->request)->run();
+        // END VALIDASI
+
+        if ($isDataValid) {
+
+            $builder = $this->db->table('tb_transaksi');
+            $builder->join('tb_barang', 'tb_barang.kd_barang = tb_transaksi.kd_barang');
+            $builder->where('kd_pesanan', $kd_pesanan);
+            $query = $builder->get();
+            $data['transaksi'] = $query->getResult();
+
+            foreach ($query->getResult() as $data) {
+
+                $transaksi->update($data->id, [
+                    "status_transaksi"     => $this->request->getPost('status_transaksi'),
+                    "updated_at"           => date('Y-m-d H:i:s')
+                ]);
+
+
+                //update stok produk
+                // $builder = $this->db->table('tb_barang');
+                // $builder->where('kd_barang', $data->kd_barang);  
+                // $query = $builder->get();
+                // var_dump($query);
+                // die;
+                // $data['barang'] = $query->getResult();
+
+                $hasilpengurangan = $data->stok - $data->jml_barang;
+
+                $barang->update($data->kd_barang, [
+                    "stok"           => $hasilpengurangan,
+                    "updated_at"     => date('Y-m-d H:i:s'),
+                ]);
+                //end update stok
+
+            }
+            //flash message
+            session()->setFlashdata('message', 'Stauts produk Berhasil diedit.');
+
+            return redirect('orders', $data);
+        }
+
+        return redirect('orders', $data);
+    }
 }
